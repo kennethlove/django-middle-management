@@ -15,9 +15,10 @@ def run_command_view(request, command: str) -> HttpResponse:
 
     token = request.headers.get("Authorization")
     body = json.loads(request.POST.get("data", "{}"))
-    print(command, token, body)
 
     if command in ALLOW_LIST:
-        os.system(f"python manage.py {command}")
+        data = " ".join([f"--{key} {value}" for key, value in body.items()])
+        command_to_run = f"python ./manage.py {command} {data}"
+        os.system(command_to_run)
         return HttpResponse("Command executed")
     return HttpResponse("Command not allowed", status=403)
