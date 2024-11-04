@@ -1,7 +1,5 @@
-from django.conf import settings
-from django.core.management import call_command
-from django.core.management.base import BaseCommand, CommandError, CommandParser
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    pass
+    """A management command to check the Django project's configuration."""

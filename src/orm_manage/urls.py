@@ -1,4 +1,5 @@
 from django.urls import path
+
 from orm_manage.views import run_command_view
 
 urlpatterns = [
