@@ -2,7 +2,8 @@ from unittest.mock import patch
 
 from django.urls import reverse
 
-@patch("orm_manage.views.call_command")
+
+@patch("orm_manage.views.call_command", spec=True)
 def test_basic_authenticated_usage(call_command, admin_client):
     """A POST request with valid authentication and command name should return a 200 response."""
     headers = {
@@ -12,20 +13,20 @@ def test_basic_authenticated_usage(call_command, admin_client):
     url = reverse("manage_run_command", kwargs={"command": "check"})
     response = admin_client.post(url, data=data, **headers)
     assert response.status_code == 200
-    assert call_command.called_once_with("check", **data)
+    call_command.assert_called_once_with("check", **data)
 
 
-@patch("orm_manage.views.call_command")
+@patch("orm_manage.views.call_command", spec=True)
 def test_basic_unauthenticated_usage(call_command, client):
     """A POST request without valid authentication should return a 200 response."""
     data = {}
     url = reverse("manage_run_command", kwargs={"command": "check"})
     response = client.post(url, data=data)
     assert response.status_code == 403
-    assert call_command.not_called()
+    call_command.assert_not_called()
 
 
-@patch("orm_manage.views.call_command")
+@patch("orm_manage.views.call_command", spec=True)
 def test_invalid_command_usage(call_command, admin_client):
     """A POST request with valid authentication but an invalid command name should return a 403 response."""
     headers = {
@@ -35,4 +36,4 @@ def test_invalid_command_usage(call_command, admin_client):
     url = reverse("manage_run_command", kwargs={"command": "not_a_command"})
     response = admin_client.post(url, data=data, **headers)
     assert response.status_code == 403
-    assert call_command.not_called()
+    call_command.assert_not_called()
