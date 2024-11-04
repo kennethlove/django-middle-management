@@ -21,7 +21,6 @@ def run_command_view(request, command: str) -> HttpResponse:
     body = json.loads(request.POST.get("data", "{}"))
 
     if command in ALLOW_LIST:
-        data = " ".join([f"--{key} {value}" for key, value in body.items()])
         call_command(command, **body)
         return HttpResponse("Command executed")
     return HttpResponse("Command not allowed", status=403)
