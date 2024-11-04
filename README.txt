@@ -34,14 +34,15 @@ urlpatterns = [
 
 ## Usage
 
-To execute a management command, make a POST request to the `/__manage__/<command name>` endpoint with the following JSON payload:
+To execute a management command, make a `POST` request to the `/__manage__/<command name>` endpoint with the following JSON payload:
 
 ```json
 {
-    "command": "check",
-    "args": [],
-    "options": {
-        "tag": "compatibility"
+    "data": {
+        "arg1": "value1",
+        "arg2": "value2"
     }
 }
 ```
+
+Your `POST` must also contain a valid `HTTP_AUTHORIZATION` header with the value `Bearer <token>`.
