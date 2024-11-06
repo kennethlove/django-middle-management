@@ -9,8 +9,15 @@ Warning: This project runs commands synchronously. Long-running commands will bl
 ## Installation
 
 ```bash
+pip install git+https://github.com/kennethlove/orm-manage.git
+```
+
+or, once released,
+
+```bash
 pip install orm-manage
 ```
+
 
 Add it to your `INSTALLED_APPS`:
 
