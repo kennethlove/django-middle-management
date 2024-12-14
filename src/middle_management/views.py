@@ -4,13 +4,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.management import call_command
 from django.http import HttpResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 
 ALLOW_LIST: list[str] = settings.MANAGE_ALLOW_LIST if hasattr(settings, "MANAGE_ALLOW_LIST") else []
 
 
-@require_POST()
-@login_required
+@login_required()
+@require_http_methods(["POST"])
 def run_command_view(request, command: str) -> HttpResponse:
     """Execute a management command from a list of allowed commands.
 

@@ -31,7 +31,7 @@ def test_basic_unauthenticated_usage(call_command, client):
     data = {}
     url = reverse("manage_run_command", kwargs={"command": "noop"})
     response = client.post(url, data=json.dumps(data), content_type="application/json")
-    assert response.status_code == 403
+    assert response.status_code == 302
     call_command.assert_not_called()
 
 
