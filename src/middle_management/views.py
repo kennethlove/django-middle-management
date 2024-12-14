@@ -16,9 +16,9 @@ def run_command_view(request, command: str) -> HttpResponse:
 
     Accepts a command name, authentication token, and optional arguments as a JSON body.
     """
-    body = json.loads(request.POST.get("data", "{}"))
 
     if command in ALLOW_LIST:
-        call_command(command, **body)
+        data = json.loads(request.body)
+        call_command(command, **data)
         return HttpResponse("Command executed")
     return HttpResponse("Command not allowed", status=403)

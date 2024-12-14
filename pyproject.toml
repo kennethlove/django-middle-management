@@ -3,12 +3,11 @@ build-backend = "flit_core.buildapi"
 requires = ["flit_core>=3.2,<4"]
 
 [project]
-name = "orm-manage"
+name = "django-middle-management"
 version = "0.1.0"
-description = "ORM Manage"
-authors = [{name = "klove", email="klove@oreilly.com"}]
+description = "A Django app for remote execution of management commands."
+authors = [{name = "klove", email="kennethlove@gmail.com"}]
 dependencies = [
-    "celery",
     "django",
     "django_rest_framework",
     "flit<4,>=3.2"
@@ -58,7 +57,7 @@ source = ["src"]
 output = ".coverage.xml"
 
 [tool.flit.module]
-name = "orm_manage"
+name = "middle_management"
 
 [tool.interrogate]
 color = true
@@ -129,7 +128,7 @@ ignore-init-module-imports = true
 
 src = ["src", "tests"]
 # Assume Python 3.10.
-target-version = "py310"
+target-version = "py311"
 
 indent-width = 4
 line-length = 88
@@ -142,7 +141,7 @@ quote-style = "double"
 skip-magic-trailing-comma = false
 
 [tool.ruff.per-file-ignores]
-"src/orm_manage/*.pyi" = [
+"src/middle_management/*.pyi" = [
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
     "D102", # Missing docstring in public method
@@ -159,7 +158,7 @@ skip-magic-trailing-comma = false
 
 [tool.ruff.isort]
 combine-as-imports = true
-known-third-party = ["django"]
+known-third-party = ["django", "rest_framework"]
 split-on-trailing-comma = true
 
 [tool.ruff.mccabe]

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from orm_manage.views import run_command_view
+from middle_management.views import run_command_view
 
 urlpatterns = [
     path("__manage__/<str:command>", run_command_view, name="manage_run_command"),

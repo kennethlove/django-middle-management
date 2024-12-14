@@ -28,7 +28,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "orm_manage.apps.OrmManageConfig",
+    "middle_management",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

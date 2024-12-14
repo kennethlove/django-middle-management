@@ -1,4 +1,4 @@
-# ORM Manage
+# Django Middle Management
 
 Small library to it possible to securely and remotely execute Django management commands.
 
@@ -9,13 +9,13 @@ Warning: This project runs commands synchronously. Long-running commands will bl
 ## Installation
 
 ```bash
-pip install git+https://github.com/kennethlove/orm-manage.git
+pip install git+https://github.com/kennethlove/django-middle-management.git
 ```
 
 or, once released,
 
 ```bash
-pip install orm-manage
+pip install django-middle-management
 ```
 
 
@@ -23,8 +23,8 @@ Add it to your `INSTALLED_APPS`:
 
 ```python
 INSTALLED_APPS = [
-    ...
-    'orm_manage',
+    ...,
+    "middle_management",
     ...
 ]
 ```
@@ -32,7 +32,7 @@ INSTALLED_APPS = [
 Add the URLs to your project's `urls.py`:
 
 ```python
-from orm_manage.urls import manage_urls
+from middle_management.urls import manage_urls
 
 urlpatterns = [
     ...
