@@ -1,3 +1,5 @@
+from project.settings import MANAGE_ALLOW_LIST
+
 # Django Middle Management
 
 Small library to it possible to securely and remotely execute Django management commands.
@@ -37,6 +39,12 @@ from middle_management.urls import manage_urls
 urlpatterns = [
     ...
 ] + manage_urls
+```
+
+And, finally, add an allowlist of commands:
+
+```python
+MANAGE_ALLOW_LIST = ["noop"]
 ```
 
 ## Usage
