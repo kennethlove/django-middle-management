@@ -9,7 +9,6 @@ description = "A Django app for remote execution of management commands."
 authors = [{name = "klove", email="kennethlove@gmail.com"}]
 dependencies = [
     "django",
-    "django_rest_framework",
     "flit<4,>=3.2"
 ]
 license = { file = "LICENSE.txt" }
