@@ -26,6 +26,10 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
 ]
 
+[project.urls]
+Repository = "https://github.com/kennethlove/django-middle-management.git"
+Issues = "https://github.com/kennethlove/django-middle-management/issues"
+
 [project.optional-dependencies]
 development = [
     "interrogate",
