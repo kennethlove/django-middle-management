@@ -14,7 +14,7 @@ ALLOW_LIST: list[str] = (settings.MANAGE_ALLOW_LIST if
 
 @login_required()
 @require_http_methods(["POST"])
-def run_command_view(request, command: str) -> HttpResponse:
+def run_command_view(request: HttpRequest, command: str) -> HttpResponse:
     """Execute a management command from a list of allowed commands.
 
     Accepts a command name, authentication token, and optional arguments as a JSON body.
