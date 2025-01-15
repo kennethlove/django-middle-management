@@ -117,4 +117,4 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MANAGE_ALLOW_LIST = ["check"]
+MANAGE_ALLOW_LIST = ["noop"]

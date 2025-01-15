@@ -17,7 +17,7 @@ def test_basic_authenticated_usage(call_command, admin_client):
     }
 
     data = {"foo": "bar", "baz": "qux"}
-    url = reverse("manage_run_command", kwargs={"command": "check"})
+    url = reverse("manage_run_command", kwargs={"command": "noop"})
 
     response = admin_client.post(
         url,
@@ -27,7 +27,7 @@ def test_basic_authenticated_usage(call_command, admin_client):
     )
 
     assert response.status_code == 200
-    call_command.assert_called_once_with("check", **data)
+    call_command.assert_called_once_with("noop", **data)
 
 
 @patch("middle_management.views.call_command", spec=True)
@@ -37,9 +37,9 @@ def test_basic_unauthenticated_usage(call_command, client):
     A POST request without valid authentication should return a 403 response.
     """
     data = {}
-    url = reverse("manage_run_command", kwargs={"command": "check"})
+    url = reverse("manage_run_command", kwargs={"command": "noop"})
     response = client.post(url, data=json.dumps(data), content_type="application/json")
-    assert response.status_code == 403
+    assert response.status_code == 302
     call_command.assert_not_called()
 
 

@@ -1,25 +1,28 @@
 # Django Middle Management
 
-Small library to it possible to securely and remotely execute Django management commands.
+It's usually a bad idea to connect to production servers to run one-off or maintenance
+commands. There may not be any auditing, commands and payloads can have mistakes, and
+a rogue developer could get away with almost anything. With `django-middle-management`,
+though, you don't have to allow shell access so your headaches are reduced.
 
-Note: This is a work in progress and is not yet ready for production use.
+This is a small library that makes it possible to securely and remotely execute Django
+management commands via `POST` requests. Commands must be merged into your code base
+before they're eligible to be used. They must also be listed in `settings.py` or they
+cannot be triggered. Finally, requests must be authenticated by your system before any
+command can be given.
 
-Warning: This project runs commands synchronously. Long-running commands will block the server.
+Warning: This project runs management commands remotely but _synchronously_.
+Long-running commands will potentially block your server from responding to other requests.
+Using a task queue like Celery is recommend for anything that may take more than a few seconds.
 
 ## Installation
-
-```bash
-pip install git+https://github.com/kennethlove/django-middle-management.git
-```
-
-or, once released,
 
 ```bash
 pip install django-middle-management
 ```
 
 
-Add it to your `INSTALLED_APPS`:
+Add the package to your `INSTALLED_APPS`:
 
 ```python
 INSTALLED_APPS = [
@@ -39,9 +42,16 @@ urlpatterns = [
 ] + manage_urls
 ```
 
+And, finally, add an allowlist of commands:
+
+```python
+MANAGE_ALLOW_LIST = ["noop"]
+```
+
 ## Usage
 
-To execute a management command, make a `POST` request to the `/__manage__/<command name>` endpoint with the following JSON payload:
+To execute a management command, make a `POST` request to the
+`/__manage__/<command name>` endpoint with the following JSON payload:
 
 ```json
 {
@@ -52,4 +62,5 @@ To execute a management command, make a `POST` request to the `/__manage__/<comm
 }
 ```
 
-Your `POST` must also contain a valid `HTTP_AUTHORIZATION` header with the value `Bearer <token>`.
+Your `POST` must also contain a valid `HTTP_AUTHORIZATION` header
+with the value `Bearer <token>`.
