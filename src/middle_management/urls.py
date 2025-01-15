@@ -1,3 +1,5 @@
+"""URLS for the middle_management app."""
+
 from django.urls import path
 
 from middle_management.views import run_command_view

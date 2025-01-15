@@ -86,7 +86,7 @@ pythonpath = [".", "src", "tests.project"]
 testpaths = ["tests"]
 
 [tool.ruff]
-select = [
+lint.select = [
     "ANN", # flake8-annotations
     "B",   # flake8-bugbear
     "BLE", # flake8-blind-except
@@ -117,17 +117,16 @@ select = [
 ]
 
 # ignore
-ignore = ["ANN101", "COM812", "D203", "D211", "D213", "F403"]
+lint.ignore = ["COM812", "D203", "D211", "D213", "F403"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
+lint.fixable = ["ALL"]
+lint.unfixable = []
 
 extend-exclude = ["docs"]
-ignore-init-module-imports = true
 
 src = ["src", "tests"]
-# Assume Python 3.10.
+# Assume Python 3.11+.
 target-version = "py311"
 
 indent-width = 4
@@ -140,7 +139,7 @@ line-ending = "auto"
 quote-style = "double"
 skip-magic-trailing-comma = false
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "src/middle_management/*.pyi" = [
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
@@ -156,11 +155,11 @@ skip-magic-trailing-comma = false
     "S101",   # assert used
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 known-third-party = ["django", "rest_framework"]
 split-on-trailing-comma = true
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
