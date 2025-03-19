@@ -2,11 +2,12 @@
 import json
 from unittest.mock import patch
 
+from django.test import Client
 from django.urls import reverse
 
 
 @patch("middle_management.views.call_command", spec=True)
-def test_basic_authenticated_usage(call_command, admin_client):
+def test_basic_authenticated_usage(call_command, admin_user):
     """Test a valid command name with an authenticated user.
 
     A POST request with valid authentication and command name should return
@@ -16,14 +17,14 @@ def test_basic_authenticated_usage(call_command, admin_client):
         "HTTP_AUTHORIZATION": "Bearer some_valid_token",
     }
 
+    client = Client(enforce_csrf_checks=True)
+    client.force_login(user=admin_user)
+
     data = {"foo": "bar", "baz": "qux"}
     url = reverse("manage_run_command", kwargs={"command": "noop"})
 
-    response = admin_client.post(
-        url,
-        data=json.dumps(data),
-        content_type="application/json",
-        headers=headers
+    response = client.post(
+        url, data=json.dumps(data), content_type="application/json", headers=headers
     )
 
     assert response.status_code == 200
