@@ -6,12 +6,14 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.management import call_command
 from django.http import HttpRequest, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 ALLOW_LIST: list[str] = (settings.MANAGE_ALLOW_LIST if
                          hasattr(settings, "MANAGE_ALLOW_LIST") else [])
 
 
+@csrf_exempt
 @login_required()
 @require_http_methods(["POST"])
 def run_command_view(request: HttpRequest, command: str) -> HttpResponse:
