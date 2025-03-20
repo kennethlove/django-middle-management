@@ -41,7 +41,8 @@ testing = [
     "pytest-cov",
     "pytest-django",
     "pytest-randomly",
-    "pytest-xdist"
+    "pytest-xdist",
+    "django-rest-framework",
 ]
 
 [tool.coverage.report]
