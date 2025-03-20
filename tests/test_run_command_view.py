@@ -2,10 +2,10 @@
 import json
 from unittest.mock import patch
 
+from django.core.management import call_command as real_call_command
+from django.db import connection
 from django.test import Client, modify_settings
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient
 
 
 @patch("middle_management.views.call_command", spec=True)
@@ -79,12 +79,19 @@ def test_rest_framework_permission_class(call_command, admin_user, settings):
         "rest_framework",
         "rest_framework.authtoken",
     ]
+
+    real_call_command("migrate", "--run-syncdb")
+
+    from rest_framework.authtoken.models import Token
+    from rest_framework.test import APIClient
+
     token = Token.objects.create(user=admin_user)
     headers = {
         "Authorization": f"Token {token.key}",
     }
 
     client = APIClient()
+    client.credentials(HTTP_AUTHORIZATION=headers["Authorization"])
 
     data = {"foo": "bar", "baz": "qux"}
     url = reverse("manage_run_command", kwargs={"command": "noop"})

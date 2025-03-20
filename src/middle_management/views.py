@@ -25,8 +25,11 @@ def run_command_view(request: HttpRequest, command: str) -> HttpResponse:
 
     Accepts a command name, authentication token, and optional arguments as a JSON body.
     """
+    print("view")
     if request.user.is_authenticated:
+        print("auth")
         if command in ALLOW_LIST:
+            print("allow")
             try:
                 data = json.loads(request.body)
             except json.JSONDecodeError:
