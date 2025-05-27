@@ -17,6 +17,12 @@ Long-running commands will potentially block your server from responding to othe
 Using a task queue like Celery is recommend for anything that may take more than a few
 milliseconds.
 
+## Requirements
+
+- Python 3.11 or higher
+- Django
+- Django REST Framework (optional)
+
 ## Installation
 
 ```shell
@@ -48,8 +54,8 @@ Add the URLs to your project's `urls.py`:
 from middle_management.urls import manage_urls
 
 urlpatterns = [
-                  ...
-              ] + manage_urls
+    ...
+] + manage_urls
 ```
 
 You'll need to write a new management command or select an
@@ -68,10 +74,8 @@ the following:
 
 ```json
 {
-  "data": {
-    "arg1": "value1",
-    "arg2": "value2"
-  }
+  "arg1": "value1",
+  "arg2": "value2"
 }
 ```
 
@@ -83,18 +87,18 @@ named `sessionid`, you can run the following command:
 curl -XPOST \
   -H 'Cookie: sessionid=not-a-real-session-id' \
   -H "Content-type: application/json" \
-  -d '{"data": { "arg1": "value1", "arg2": "value2" }}' \
+  -d '{"arg1": "value1", "arg2": "value2"}' \
   'https://example.com/__manage__/noop'
 ```
 
 When using Django REST Framework, your `POST` must also contain a valid
-`HTTP_AUTHORIZATION` header with the value `Bearer <token>`. The final
+`Authorization` header with the value `Token <token>`. The final
 request will look something like:
 
 ```shell
 curl -XPOST \
-  -H 'Authorization: Bearer not-a-real-token' \
+  -H 'Authorization: Token not-a-real-token' \
   -H "Content-type: application/json" \
-  -d '{"data": { "arg1": "value1", "arg2": "value2" }}' \
+  -d '{"arg1": "value1", "arg2": "value2"}' \
   'https://example.com/__manage__/noop'
 ```
