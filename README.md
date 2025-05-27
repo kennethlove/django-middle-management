@@ -19,12 +19,20 @@ milliseconds.
 
 ## Installation
 
-```bash
+```shell
 pip install django-middle-management
 ```
 
+If you're using Django REST Framework, you can install with
 
-Add the package to your `INSTALLED_APPS`:
+```shell
+pip install django-middle-management[drf]
+```
+
+This will install the package along with its optional dependencies
+for Django REST Framework support.
+
+Next, add the package to your `INSTALLED_APPS`:
 
 ```python
 INSTALLED_APPS = [
@@ -40,8 +48,8 @@ Add the URLs to your project's `urls.py`:
 from middle_management.urls import manage_urls
 
 urlpatterns = [
-    ...
-] + manage_urls
+                  ...
+              ] + manage_urls
 ```
 
 You'll need to write a new management command or select an
@@ -60,16 +68,28 @@ the following:
 
 ```json
 {
-    "data": {
-        "arg1": "value1",
-        "arg2": "value2"
-    }
+  "data": {
+    "arg1": "value1",
+    "arg2": "value2"
+  }
 }
 ```
 
-Your `POST` must also contain a valid `HTTP_AUTHORIZATION` header
-with the value `Bearer <token>`. The final request will look
-something like:
+When using Django, you will also need to include a valid
+session cookie in your request. For example, if you have a session cookie
+named `sessionid`, you can run the following command:
+
+```shell
+curl -XPOST \
+  -H 'Cookie: sessionid=not-a-real-session-id' \
+  -H "Content-type: application/json" \
+  -d '{"data": { "arg1": "value1", "arg2": "value2" }}' \
+  'https://example.com/__manage__/noop'
+```
+
+When using Django REST Framework, your `POST` must also contain a valid
+`HTTP_AUTHORIZATION` header with the value `Bearer <token>`. The final
+request will look something like:
 
 ```shell
 curl -XPOST \
