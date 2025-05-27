@@ -42,7 +42,9 @@ testing = [
     "pytest-django",
     "pytest-randomly",
     "pytest-xdist",
-    "django-rest-framework",
+]
+drf = [
+    "djangorestframework"
 ]
 
 [tool.coverage.report]
@@ -96,7 +98,9 @@ verbose = 1
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.project.settings"
 django_find_project = false
-markers = []
+markers = [
+    "drf: tests that require Django REST Framework",
+]
 norecursedirs = [".devcontainer", ".git", ".mypy_cache", "__pycache__", "docs"]
 pythonpath = [".", "src", "tests.project"]
 testpaths = ["tests"]
@@ -133,7 +137,7 @@ lint.select = [
 ]
 
 # ignore
-lint.ignore = ["COM812", "D203", "D211", "D213", "F403"]
+lint.ignore = ["COM812", "D203", "D211", "D213", "F403", "D104"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 lint.fixable = ["ALL"]
