@@ -4,12 +4,12 @@ requires = ["flit_core>=3.2,<4"]
 
 [project]
 name = "django-middle-management"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Django app for remote execution of management commands."
 authors = [{name = "klove", email="kennethlove@gmail.com"}]
 dependencies = [
     "django",
-    "flit<4,>=3.2"
+    "flit>=3.2"
 ]
 license = { file = "LICENSE.txt" }
 requires-python = ">=3.11"
@@ -41,7 +41,10 @@ testing = [
     "pytest-cov",
     "pytest-django",
     "pytest-randomly",
-    "pytest-xdist"
+    "pytest-xdist",
+]
+drf = [
+    "djangorestframework"
 ]
 
 [tool.coverage.report]
@@ -95,7 +98,9 @@ verbose = 1
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.project.settings"
 django_find_project = false
-markers = []
+markers = [
+    "drf: tests that require Django REST Framework",
+]
 norecursedirs = [".devcontainer", ".git", ".mypy_cache", "__pycache__", "docs"]
 pythonpath = [".", "src", "tests.project"]
 testpaths = ["tests"]
@@ -132,7 +137,7 @@ lint.select = [
 ]
 
 # ignore
-lint.ignore = ["COM812", "D203", "D211", "D213", "F403"]
+lint.ignore = ["COM812", "D203", "D211", "D213", "F403", "D104"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 lint.fixable = ["ALL"]
