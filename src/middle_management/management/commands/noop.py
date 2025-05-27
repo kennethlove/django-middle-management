@@ -1,3 +1,5 @@
+"""Django management command that does nothing."""
+
 from typing import Any
 
 from django.core.management.base import BaseCommand
