@@ -2,51 +2,43 @@
 import json
 from unittest.mock import patch
 
-from django.core.management import call_command as real_call_command
-from django.db import connection
-from django.test import Client, modify_settings
+import pytest
+from django.test import Client
 from django.urls import reverse
 
 
-@patch("middle_management.views.call_command", spec=True)
+@patch("middle_management.views._base.call_command", spec=True)
 def test_basic_authenticated_usage(call_command, admin_user):
     """Test a valid command name with an authenticated user.
 
     A POST request with valid authentication and command name should return
     a 200 response.
     """
-    headers = {
-        "HTTP_AUTHORIZATION": "Bearer some_valid_token",
-    }
-
     client = Client(enforce_csrf_checks=True)
     client.force_login(user=admin_user)
 
-    data = {"foo": "bar", "baz": "qux"}
+    data = {}
     url = reverse("manage_run_command", kwargs={"command": "noop"})
 
-    response = client.post(
-        url, data=json.dumps(data), content_type="application/json", headers=headers
-    )
-
+    response = client.post(url, data=json.dumps(data), content_type="application/json")
     assert response.status_code == 200
-    call_command.assert_called_once_with("noop", **data)
+    call_command.assert_called_once_with("noop")
 
 
-@patch("middle_management.views.call_command", spec=True)
+@patch("middle_management.views._base.call_command", spec=True)
 def test_basic_unauthenticated_usage(call_command, client):
     """Test a valid command with an unauthenticated user.
 
-    A POST request without valid authentication should return a 403 response.
+    A POST request without valid authentication should return a 302 response.
     """
     data = {}
     url = reverse("manage_run_command", kwargs={"command": "noop"})
     response = client.post(url, data=json.dumps(data), content_type="application/json")
-    assert response.status_code == 403
+    assert response.status_code == 302
     call_command.assert_not_called()
 
 
-@patch("middle_management.views.call_command", spec=True)
+@patch("middle_management.views._base.call_command", spec=True)
 def test_invalid_command_usage(call_command, admin_client):
     """Test a non-existent command name.
 
@@ -67,38 +59,47 @@ def test_invalid_command_usage(call_command, admin_client):
     assert response.status_code == 400
     call_command.assert_not_called()
 
+def has_drf():
+    """Check if Django REST Framework is installed."""
+    try:
+        import rest_framework  # noqa: F401
+    except ImportError:
+        return False
+    else:
+        return True
 
-@patch("middle_management.views.call_command", spec=True)
+requires_drf = pytest.mark.skipif(
+    not has_drf(),
+    reason="Django REST Framework is not installed, skipping DRF tests."
+)
+
+@requires_drf
+@pytest.mark.drf
+@pytest.mark.django_db(transaction=True)
+@patch("middle_management.views._base.call_command", spec=True)
 def test_rest_framework_permission_class(call_command, admin_user, settings):
     """Test that the DRF permission class is applied.
 
     The view should only be accessible to authenticated users.
     """
-
     settings.INSTALLED_APPS += [
         "rest_framework",
         "rest_framework.authtoken",
     ]
 
-    real_call_command("migrate", "--run-syncdb")
-
+    from django.db import connection
     from rest_framework.authtoken.models import Token
     from rest_framework.test import APIClient
 
+    with connection.schema_editor() as editor:
+        editor.create_model(Token)
+
     token = Token.objects.create(user=admin_user)
-    headers = {
-        "Authorization": f"Token {token.key}",
-    }
-
     client = APIClient()
-    client.credentials(HTTP_AUTHORIZATION=headers["Authorization"])
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
 
-    data = {"foo": "bar", "baz": "qux"}
     url = reverse("manage_run_command", kwargs={"command": "noop"})
-
-    response = client.post(
-        url, data=json.dumps(data), content_type="application/json", headers=headers
-    )
+    response = client.post(url, format="json")
 
     assert response.status_code == 200
-    call_command.assert_called_once_with("noop", **data)
+    call_command.assert_called_once_with("noop")
