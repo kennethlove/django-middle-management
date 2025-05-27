@@ -29,8 +29,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "middle_management",
-    # "rest_framework",
-    # "rest_framework.authtoken",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -73,19 +71,10 @@ WSGI_APPLICATION = "project.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "sqlite": {
+    "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": ":memory:",
-        "ATOMIC_REQUESTS": False,
-    },
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "password",
-        "HOST": "localhost",
-        "PORT": "5432",
-    },
+    }
 }
 
 # Password validation
